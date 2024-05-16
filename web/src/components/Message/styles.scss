@@ -27,6 +27,7 @@
   }
 
   .user-pic {
+    position: relative;
     width: 40px;
     height: 40px;
     background-color: green;
@@ -35,6 +36,11 @@
     justify-content: center;
     align-items: center;
     font-weight: 700;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
   }
 
   .user-msg {

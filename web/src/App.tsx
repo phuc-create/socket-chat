@@ -5,9 +5,11 @@ import './App.css'
 import useSocket from './socket'
 import Username from './components/Username'
 import { Message } from './components'
+import { animals } from './assets/icons'
 type Message = {
   username: string,
-  message: string
+  message: string,
+  icon: string
 }
 
 type User = {
@@ -19,21 +21,24 @@ function App() {
   const [users, setUsers] = useState<User[]>([])
   const [chatOpen, setChatOpen] = useState(false)
   const [username, setUsername] = useState("")
+  const [iconProfile, setIconProfile] = useState("")
   const messageViewRef = useRef<HTMLDivElement>(null)
 
   const { socket } = useSocket()
-  const handleSubmit = () => {
-    socket?.send(JSON.stringify({ username: username, message: value }))
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!value.length && value === "") return
+    socket?.send(JSON.stringify({ username: username, message: value, icon: iconProfile }))
     setValue("")
   }
 
 
 
   useEffect(() => {
-    // socket?.addEventListener("open", (e) => {
+    socket?.addEventListener("open", (e) => {
+      socket.send("Chat initialization")
 
-
-    // })
+    })
     socket?.addEventListener("message", (e) => {
       const messages = JSON.parse(e.data)
       // console.log(messages)
@@ -41,11 +46,11 @@ function App() {
     })
 
     return () => {
-      if (socket?.readyState === 1) { // <-- This is important
-        socket?.close(123, `${username} has left the chat`)
-      }
+
+      socket?.close(4000, `${username} has left the chat`)
+
     }
-  }, [socket, username])
+  }, [socket])
 
   useEffect(() => {
     scrollToBottom()
@@ -56,8 +61,9 @@ function App() {
   }
 
   const handleOpenChat = () => {
+    if (!iconProfile.length) return
     if (username === "" || username.length < 4) return
-    socket?.send(JSON.stringify({ username: username, message: `${username} has entered the chat!!` }))
+    socket?.send(JSON.stringify({ username: username, message: `${username} has entered the chat!!`, icon: iconProfile }))
     setChatOpen(() => true)
   }
 
@@ -69,23 +75,43 @@ function App() {
     <>
       <h1 className='text-red-500'>Vite + Socket</h1>
       {!chatOpen ? (
-        <Username value={username} handleChangeUsername={handleChangeUsername} handleOpenChat={handleOpenChat}></Username>
+        <>
+          <Username value={username} handleChangeUsername={handleChangeUsername} handleOpenChat={handleOpenChat}></Username>
+          <div className='flex' style={{ display: "flex", marginTop: "2rem" }}>
+            {Object.entries(animals).map(animal => {
+              return <div
+                key={animal[0]}
+                onClick={() => setIconProfile(animal[0])}
+                style={{ cursor: "pointer" }}
+              >
+                {animal[0] === "bot" ? null : (
+                  <img src={animal[1]} alt={animal[0]} style={{ width: 50, height: 50, borderRadius: "50%", }} />
+                )}
+              </div>
+            })}
+          </div>
+          {
+            iconProfile.length && iconProfile !== "" ? (
+              <img src={animals[iconProfile]} alt="hello" style={{ margin: "3rem", width: 128, height: 128, borderRadius: "50%", }} />
+            ) : null
+          }
+        </>
       ) : (
         <div className="card">
           <div className='messages'>
             {messages.map((msg) => {
               return (
-                <Message key={crypto.randomUUID()} side={msg.username === username ? 'right' : "left"} message={msg} />
+                <Message key={crypto.randomUUID()} icon={iconProfile} side={msg.username === username ? 'right' : "left"} message={msg} />
               )
             })}
             <div ref={messageViewRef}></div>
           </div>
-          <div className='message-input'>
+          <form onSubmit={handleSubmit} className='message-input'>
             <input className='input' type='text' name='message' placeholder='message...' value={value} onChange={e => setValue(e.target.value)} />
-            <button onClick={handleSubmit}>
+            <button type='submit'>
               Send
             </button>
-          </div>
+          </form>
         </div>
       )}
       <p className="read-the-docs">

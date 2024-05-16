@@ -2,7 +2,7 @@ import type { ServerWebSocket } from "bun"
 
 
 type TMessage = {
-  username: string, message: string
+  username: string, message: string, icon: string
 }
 
 type TUser = {
@@ -31,7 +31,7 @@ const server = Bun.serve<{ username: string }>({
       // socketServer.push(ws)
       // const msg = `${ws.data.username} has entered the chat`
       const msg = messages.length ? "Welcome to the chat" : "The new chat was opened!"
-      messages.push({ username: "Bot", message: msg })
+      messages.push({ username: "Bot", message: msg, icon: "bot" })
       // sendToEveryone(messages)
       // ws.publish("group-chat", JSON.stringify(messages))
       server.publish("group-chat", JSON.stringify(messages))
@@ -41,15 +41,15 @@ const server = Bun.serve<{ username: string }>({
       console.log("this is incomming message: ", msg)
       // this is a group chat
       // so the server re-broadcasts incoming message to everyone
-      const data = { username: msg.username, message: msg.message }
-      messages.push(data)
+      // const data = { username: msg.username, message: msg.message }
+      messages.push(msg)
 
       // sendToEveryone(messages)
       server.publish("group-chat", JSON.stringify(messages))
     },
     close: (ws, code, reason) => {
       ws.unsubscribe("group-chat")
-      const data = { username: "Bot", message: reason }
+      const data = { username: "Bot", message: "A user has left the chat" + reason, icon: "bot" }
       messages.push(data)
       server.publish("group-chat", JSON.stringify(messages))
       // socketServer.filter(open => open.data.username !== ws.data.username

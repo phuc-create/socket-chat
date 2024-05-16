@@ -1,7 +1,9 @@
 import React from 'react'
 import "./styles.scss"
+import { animals } from '../../assets/icons'
 
 interface IMessageProps {
+  icon: string
   side: "left" | "right",
   message: TMessage
 }
@@ -9,9 +11,10 @@ interface IMessageProps {
 type TMessage = {
   username: string,
   message: string
+  icon: string
 }
 
-const Message: React.FC<IMessageProps> = ({ side, message }) => {
+const Message: React.FC<IMessageProps> = ({ icon, side, message }) => {
   if (side === "right") {
     return (
       <div className='msg-group right'>
@@ -24,13 +27,15 @@ const Message: React.FC<IMessageProps> = ({ side, message }) => {
           </div>
         </div>
 
-        <span className='user-pic'>{message.username.slice(0, 1)}</span>
+        <span className='user-pic'>
+          <img src={animals[message.icon]} />
+        </span>
       </div>
     )
   }
   return (
     <div className='msg-group left'>
-      <div className='user-pic'>{message.username.slice(0, 1)}</div>
+      <div className='user-pic'><img src={animals[message.icon]} /></div>
       <div className='content-group'>
         <span className='user-infor'>{message.username}</span>
         <div className='wrapper'>
