@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
-// import { socket } from './socket'
-import { ConnectionState } from './components/ConnectionState'
+import useSocket from './socket'
+import Username from './components/Username'
+import { Message } from './components'
 type Message = {
   username: string,
   message: string
@@ -12,92 +13,81 @@ type Message = {
 type User = {
   username: string,
 }
-const socket = new WebSocket("ws://localhost:4000")
 function App() {
-  const [isConnected, setIsConnected] = useState(false)
   const [value, setValue] = useState("")
   const [messages, setMessages] = useState<Message[]>([])
   const [users, setUsers] = useState<User[]>([])
+  const [chatOpen, setChatOpen] = useState(false)
+  const [username, setUsername] = useState("")
+  const messageViewRef = useRef<HTMLDivElement>(null)
 
+  const { socket } = useSocket()
   const handleSubmit = () => {
-
-    socket.send(
-      value
-    )
+    socket?.send(JSON.stringify({ username: username, message: value }))
     setValue("")
+  }
 
-  }
-  const addMessage = (msg: Message) => {
-    setMessages((prev) => [...prev, msg])
-  }
-  console.log(messages, users)
+
 
   useEffect(() => {
-    socket.addEventListener("open", (e) => {
-      console.log("init chat app", e)
-      socket.send("Connection established")
+    // socket?.addEventListener("open", (e) => {
 
-    })
-    socket.addEventListener("message", (e) => console.log(e))
-    socket.addEventListener("message", (e) => {
+
+    // })
+    socket?.addEventListener("message", (e) => {
       const messages = JSON.parse(e.data)
-      console.log(messages)
+      // console.log(messages)
       setMessages(messages)
-      // switch (evt.type) {
-      //   case "USERS":
-      //     setUsers(evt.data)
-      //     break
-      //   case "MESSAGES":
-      //     setMessages(evt.data)
-      //     break
-      //   case "ADD_MSG":
-      //     addMessage(evt.data)
-      //     break
-      //   case "LEAVE":
-      //     setUsers(evt.data)
-      //     break
-      //   default:
-      //     break
-      // }
     })
+
     return () => {
-      if (socket.readyState === 1) { // <-- This is important
-        socket.close()
+      if (socket?.readyState === 1) { // <-- This is important
+        socket?.close(123, `${username} has left the chat`)
       }
     }
-  }, [socket])
+  }, [socket, username])
 
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
+  const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value)
+  }
+
+  const handleOpenChat = () => {
+    if (username === "" || username.length < 4) return
+    socket?.send(JSON.stringify({ username: username, message: `${username} has entered the chat!!` }))
+    setChatOpen(() => true)
+  }
+
+  const scrollToBottom = () => {
+    messageViewRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
 
   return (
     <>
-
-      <h1>Vite + Socket</h1>
-      <ConnectionState isConnected={isConnected} />
-      <div className="card">
-        <div className='messages'>
-          {messages.map(msg => {
-            return (
-              <div className='msg-group'>
-                <span className='user-pic'>{msg.username.slice(0, 1)}</span>
-                <span className='user-msg'>{msg.message}</span>
-              </div>
-            )
-          })}
-
+      <h1 className='text-red-500'>Vite + Socket</h1>
+      {!chatOpen ? (
+        <Username value={username} handleChangeUsername={handleChangeUsername} handleOpenChat={handleOpenChat}></Username>
+      ) : (
+        <div className="card">
+          <div className='messages'>
+            {messages.map((msg) => {
+              return (
+                <Message key={crypto.randomUUID()} side={msg.username === username ? 'right' : "left"} message={msg} />
+              )
+            })}
+            <div ref={messageViewRef}></div>
+          </div>
+          <div className='message-input'>
+            <input className='input' type='text' name='message' placeholder='message...' value={value} onChange={e => setValue(e.target.value)} />
+            <button onClick={handleSubmit}>
+              Send
+            </button>
+          </div>
         </div>
-        <div className='message-input'>
-          <input className='input' type='text' name='message' placeholder='message...' value={value} onChange={e => setValue(e.target.value)} />
-          <button onClick={handleSubmit}>
-            Send
-          </button>
-        </div>
-        {/* <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p> */}
-      </div>
+      )}
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>

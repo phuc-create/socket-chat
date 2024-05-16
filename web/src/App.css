@@ -43,8 +43,8 @@
 }
 
 .messages {
-  width: 400px;
-  max-width: 320px;
+  width: 500px;
+  max-width: 500px;
   border-radius: 8px;
   margin-bottom: 1rem;
   border: 1px solid transparent;
@@ -81,33 +81,6 @@
 
 .read-the-docs {
   color: #888;
-}
-
-.msg-group {
-  display: flex;
-  height: auto;
-  align-items: center;
-  align-items: flex-start;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.msg-group .user-pic {
-  width: 40px;
-  height: 40px;
-  background-color: green;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 700;
-}
-
-.msg-group .user-msg {
-  width: calc(100% - 48px);
-  text-align: left;
-  font-weight: 700;
-  word-break: break-word;
 }
 
 

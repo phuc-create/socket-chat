@@ -1,0 +1,73 @@
+.msg-group {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  height: auto;
+  align-items: center;
+  align-items: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: white;
+
+  .content-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .user-infor {
+      font-size: 0.65rem;
+      color: gray;
+    }
+
+    .wrapper {
+      display: flex;
+      border: 1px solid #1e1e1e;
+      background-color: #242424;
+      padding: 0.5rem;
+    }
+  }
+
+  .user-pic {
+    width: 40px;
+    height: 40px;
+    background-color: green;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+  }
+
+  .user-msg {
+    text-align: left;
+    font-weight: 500;
+    word-break: break-word;
+  }
+
+  &.right {
+    grid-template-columns: 40px 1fr 40px;
+
+    .content-group {
+      align-items: flex-end;
+
+      .wrapper {
+        justify-content: flex-end;
+        border-radius: 0.5rem 0.5rem 0 0.5rem;
+      }
+    }
+
+  }
+
+  &.left {
+    grid-template-columns: 40px 1fr 40px;
+
+    .content-group {
+      align-items: flex-start;
+
+      .wrapper {
+        justify-content: flex-start;
+        border-radius: 0.5rem 0.5rem 0.5rem 0;
+        background-color: #1d1f26;
+      }
+    }
+  }
+}
