@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import './App.css'
+import './App.scss'
 import useSocket from './socket'
 import { useMessage } from './AppContext'
 import { ChatStarter, Message } from './components'

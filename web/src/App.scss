@@ -1,50 +1,30 @@
+@import "./responsive.scss";
+
 #root {
-  max-width: 1280px;
+  min-width: 320px;
   margin: 0 auto;
   /* padding: 2rem; */
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  /* padding: 1.5em; */
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
 .card {
-  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
   border: 2px solid;
   border-color: #646cff;
+
+  @include mobile {
+    padding: 0.5rem;
+    border: none;
+  }
 }
 
 .messages {
+  min-width: 320px;
   width: 500px;
-  max-width: 500px;
   border-radius: 8px;
   margin-bottom: 1rem;
   border: 1px solid transparent;
@@ -58,6 +38,16 @@
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
+
+  @include tablet {
+    width: 400px;
+  }
+
+  @include mobile {
+    width: 320px;
+    max-width: 320px;
+    font-size: 0.875rem;
+  }
 }
 
 .message-input {
