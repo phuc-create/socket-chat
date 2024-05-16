@@ -55,7 +55,7 @@ function App() {
 
   return (
     <>
-      <h1 className='text-red-500'>Vite + Socket</h1>
+      <h1 className='app-title'>Sam's Chat</h1>
       {!chatOpen ? (
         <ChatStarter
           handleOpenChat={handleOpenChat}
@@ -76,7 +76,14 @@ function App() {
             <div ref={messageViewRef}></div>
           </div>
           <form onSubmit={handleSubmit} className='message-input'>
-            <input className='input' type='text' name='message' placeholder='message...' value={value} onChange={e => setValue(e.target.value)} />
+            <input
+              className='input'
+              type='text'
+              name='message'
+              placeholder='message...'
+              value={value}
+              onChange={e => setValue(e.target.value)}
+            />
             <button type='submit'>
               Send
             </button>

@@ -1,5 +1,6 @@
 import React from 'react'
-import { useMessage } from '../AppContext'
+import { useMessage } from '../../AppContext'
+import "./styles.scss"
 interface IUsername {
   value: string
   handleOpenChat: () => void
@@ -12,9 +13,9 @@ const Username: React.FC<IUsername> = ({ value, handleOpenChat }) => {
   }
 
   return (
-    <div className='w-full'>
+    <div className='user-start'>
       <span>User name</span>
-      <input onChange={handleChangeUsername} value={value} className='w-full rounded-lg border py-3 px-4 text-sm font-medium bg-slate-900 cursor-pointer transition duration-75' type='text' name='username'></input>
+      <input onChange={handleChangeUsername} value={value} type='text' name='username'></input>
       <button onClick={handleOpenChat}>Go to chat</button>
     </div>
   )

@@ -1,7 +1,9 @@
 import React from 'react'
-import Username from '../Username'
+
 import { animals } from '../../assets/icons'
 import { useMessage } from '../../AppContext'
+import Username from '../Username'
+import "./styles.scss"
 interface IChatStarterProps {
   handleOpenChat: () => void
   handleChangeIcon: (icon: string) => void
@@ -13,7 +15,8 @@ const ChatStarter: React.FC<IChatStarterProps> = ({ handleOpenChat, handleChange
   return (
     <>
       <Username value={username} handleOpenChat={handleOpenChat}></Username>
-      <div className='flex' style={{ display: "flex", marginTop: "2rem" }}>
+      <span>Choose an icon</span>
+      <div className='icon-list' style={{ display: "flex", marginTop: "2rem" }}>
         {Object.entries(animals).map(animal => {
           return <div
             key={animal[0]}
