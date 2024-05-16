@@ -1,10 +1,16 @@
 import React from 'react'
+import { useMessage } from '../AppContext'
 interface IUsername {
   value: string
-  handleChangeUsername: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleOpenChat: () => void
 }
-const Username: React.FC<IUsername> = ({ value, handleChangeUsername, handleOpenChat }) => {
+const Username: React.FC<IUsername> = ({ value, handleOpenChat }) => {
+  const { updateUser, userInfor } = useMessage()
+
+  const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateUser({ ...userInfor, username: e.target.value })
+  }
+
   return (
     <div className='w-full'>
       <span>User name</span>
