@@ -14,7 +14,7 @@ type TMessage = {
   icon: string
 }
 
-const Message: React.FC<IMessageProps> = ({ icon, side, message }) => {
+const Message: React.FC<IMessageProps> = ({ side, message }) => {
   if (side === "right") {
     return (
       <div className='msg-group right'>
