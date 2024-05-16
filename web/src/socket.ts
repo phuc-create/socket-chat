@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react"
 
 const useSocket = () => {
   const socketRef = useRef<WebSocket>()
-  const url = process.env.NODE_ENV === "production" ? "https://socket-chat-rbhj.onrender.com" : "ws://localhost:4000"
+  const url = process.env.NODE_ENV === "production" ? "wss://socket-chat-rbhj.onrender.com" : "ws://localhost:4000"
 
   useEffect(() => {
     if (!socketRef.current) {
