@@ -84,7 +84,7 @@ function App() {
               value={value}
               onChange={e => setValue(e.target.value)}
             />
-            <button type='submit'>
+            <button type='submit' style={{ color: "white" }}>
               Send
             </button>
           </form>
