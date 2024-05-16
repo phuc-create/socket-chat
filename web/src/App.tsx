@@ -12,13 +12,13 @@ type Message = {
   icon: string
 }
 
-type User = {
-  username: string,
-}
+// type User = {
+//   username: string,
+// }
 function App() {
   const [value, setValue] = useState("")
   const [messages, setMessages] = useState<Message[]>([])
-  const [users, setUsers] = useState<User[]>([])
+  // const [users, setUsers] = useState<User[]>([])
   const [chatOpen, setChatOpen] = useState(false)
   const [username, setUsername] = useState("")
   const [iconProfile, setIconProfile] = useState("")
@@ -35,7 +35,7 @@ function App() {
 
 
   useEffect(() => {
-    socket?.addEventListener("open", (e) => {
+    socket?.addEventListener("open", () => {
       socket.send("Chat initialization")
 
     })
@@ -50,6 +50,7 @@ function App() {
       socket?.close(4000, `${username} has left the chat`)
 
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket])
 
   useEffect(() => {
